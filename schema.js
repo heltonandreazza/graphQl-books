@@ -9,6 +9,19 @@ const {
   GraphQLList
 } = require('graphql')
 
+function translate(lang, str) {
+  const apiKey = 'AIzaSyD0Buv_ukjxKiNvyDNU_YFmu8_Ccph-Ihw'
+  const url = `https://www.googleapis.com/language/translate/v2?key=${apiKey}&source=en&target=${lang}&q=${encodeURIComponent(str)}`
+  return fetch(url)
+    .then(response => response.json())
+    .then(parsedResponse =>
+      parsedResponse
+      .data
+      .translations[0]
+      .translatedText
+    )
+}
+
 const BookType = new GraphQLObjectType({
   name: 'Book',
   description: '...',
@@ -16,8 +29,13 @@ const BookType = new GraphQLObjectType({
   fields: () => ({
     title: {
       type: GraphQLString,
-      resolve: xml =>
-        xml.GoodreadsResponse.book[0].title[0]
+      args: {
+        lang: { type: GraphQLString }
+      },
+      resolve: (xml, args) => {
+        const title = xml.GoodreadsResponse.book[0].title[0]
+        return args.lang ? translate(args.lang, title) : title
+      }
     },
     isbn: {
       type: GraphQLString,
@@ -41,7 +59,7 @@ const AuthorType = new GraphQLObjectType({
       type: new GraphQLList(BookType),
       resolve: xml => {
         const ids = xml.GoodreadsResponse.author[0].books[0].book.map(e => e.id[0]._)
-        // console.log('books') // only calls if you request for books fields
+          // console.log('books') // only calls if you request for books fields
         return Promise.all(ids.map(id =>
           fetch(
             `https://www.goodreads.com/book/show.xml?id=${id}&key=L3DrKB99JczYWVOq2FelYA`
