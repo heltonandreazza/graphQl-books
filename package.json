@@ -1,0 +1,27 @@
+{
+  "name": "graphql-books",
+  "version": "1.0.0",
+  "description": "",
+  "main": "serve.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/heltonandreazza/graphQl-books.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/heltonandreazza/graphQl-books/issues"
+  },
+  "homepage": "https://github.com/heltonandreazza/graphQl-books#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-graphql": "^0.6.11",
+    "graphql": "^0.9.6",
+    "node-fetch": "^1.7.3",
+    "nodemon": "^1.12.1",
+    "xml2js": "^0.4.19"
+  }
+}
